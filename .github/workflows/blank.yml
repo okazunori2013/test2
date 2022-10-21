@@ -55,9 +55,17 @@ jobs:
               echo "diff=true" >> $GITHUB_OUTPUT
             fi
             ls --all
+      - name: test
+        id: test
+        run: |
+          if [ ${{ steps.cheak_diff.outputs.diff }} == true && ${{ steps.cuda-update.outputs.update }} == true ]; then
+            echo "test=true" >> $GITHUB_OUTPUT
+          else
+            echo "test=false" >> $GITHUB_OUTPUT
+          fi
       - name: Create Pull Request
         id: cpr
-        if: ${{ steps.cheak_diff.outputs.diff }} == true && ${{ steps.cuda-update.outputs.update }} == true
+        if: ${{ steps.test.outputs.test }} == true
         uses: peter-evans/create-pull-request@v4
         with:
           commit-message: "[bot]update cuda-toolkit-archive"
@@ -71,6 +79,7 @@ jobs:
       - name: Check outputs
         if: always()
         run: |
+          echo ${{ steps.test.outputs.test }} test
           echo ${{ steps.cheak_diff.outputs.diff }}
           echo ${{ steps.cuda-update.outputs.update }}
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
