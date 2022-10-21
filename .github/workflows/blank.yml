@@ -59,10 +59,10 @@ jobs:
           title: "cuda-toolkit-archive update"
           labels: cuda
           body: maybe update CUDA cheak [cuda-toolkit-archive](https://developer.nvidia.com/cuda-toolkit-archive)
-          assignees: okazunori2013
           draft: true
           delete-branch: true
           branch: create-pull-request/cuda
+          author: GitHub <noreply@github.com>
       - name: Check outputs
         run: |
           echo ${{ steps.cheak_diff.outputs.diff }}
